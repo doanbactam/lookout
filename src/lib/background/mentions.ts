@@ -149,6 +149,11 @@ export async function processUserMentions(userId: string, topicId?: string) {
         return { success: true, processed: 0, mentionsFound: 0 };
       }
 
+      // Clear out any existing mentions for the prompts before processing
+      await tx
+        .delete(mentions)
+        .where(inArray(mentions.promptId, promptIds));
+
       const queue = new PQueue({
         concurrency: PARALLEL_BATCHES,
         interval: 1000,
@@ -214,9 +219,7 @@ export async function processUserMentions(userId: string, topicId?: string) {
                 }
               }
 
-              await tx
-                .delete(mentions)
-                .where(inArray(mentions.promptId, promptIds));
+
 
               const INSERT_CHUNK_SIZE = 100;
               for (
