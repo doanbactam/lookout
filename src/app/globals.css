@@ -164,3 +164,23 @@ html {
     scrollbar-color: oklch(0.985 0 0 / 0.2) transparent;
   }
 }
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.animate-shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    rgb(255 255 255 / 0.6),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}

@@ -147,6 +147,7 @@ git clone https://github.com/10xuio/lookout.git
 git checkout -b feature/amazing-feature
 
 # Make your changes and test
+bun install
 bun run test
 bun run lint
 
