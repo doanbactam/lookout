@@ -18,6 +18,30 @@ export interface CompetitorMention {
   totalSnippetLength: number;
 }
 
+export async function getHistoricalCompetitorData(
+  topicId: string,
+  days = 30
+): Promise<CompetitiveIntelligence> {
+  return extractCompetitorsFromResults(topicId, days);
+}
+
+interface CompetitiveTrend {
+  marketShareChange: number;
+  positionChange: number;
+  competitorGapChange: number;
+}
+
+function calculateCompetitiveTrend(
+  current: CompetitiveIntelligence,
+  past: CompetitiveIntelligence
+): CompetitiveTrend {
+  return {
+    marketShareChange: current.marketShare - past.marketShare,
+    positionChange: past.yourPosition - current.yourPosition,
+    competitorGapChange: current.competitorGap - past.competitorGap,
+  };
+}
+
 export interface CompetitiveIntelligence {
   topCompetitors: CompetitorMention[];
   marketShare: number;
@@ -98,7 +122,8 @@ function calculateSentiment(snippet: string): number {
 
 // Main function to extract competitors from AI results
 export async function extractCompetitorsFromResults(
-  topicId: string
+  topicId: string,
+  days?: number
 ): Promise<CompetitiveIntelligence> {
   const user = await getUser();
   if (!user) throw new Error("User not found");
@@ -117,7 +142,8 @@ export async function extractCompetitorsFromResults(
         and(
           eq(prompts.userId, user.id),
           eq(prompts.topicId, topicId),
-          eq(modelResults.status, "completed")
+          eq(modelResults.status, "completed"),
+          ...(days ? [gte(modelResults.createdAt, getDaysAgo(days))] : [])
         )
       )
       .orderBy(desc(modelResults.createdAt));
@@ -153,7 +179,7 @@ export async function extractCompetitorsFromResults(
       .where(
         and(
           eq(mentions.topicId, topicId),
-          gte(mentions.createdAt, getDaysAgo(30))
+          gte(mentions.createdAt, getDaysAgo(days ?? 30))
         )
       );
 
@@ -275,10 +301,39 @@ export async function generateCompetitiveAlerts(
     // Get current competitive intelligence
     const currentData = await extractCompetitorsFromResults(topicId || "");
 
-    // TODO: Add historical comparison for trend analysis
-    // This would compare current vs previous period competitors
+    // Fetch historical data for trend analysis (default 30 days)
+    const historicalData = await getHistoricalCompetitorData(topicId || "", 30);
+    const trend = calculateCompetitiveTrend(currentData, historicalData);
 
     // Analyze competitive changes
+    if (trend.marketShareChange > 5) {
+      alerts.push({
+        type: "success",
+        message: `Market share increased by ${trend.marketShareChange.toFixed(1)}% since last period`,
+        time: "Current",
+      });
+    } else if (trend.marketShareChange < -5) {
+      alerts.push({
+        type: "warning",
+        message: `Market share dropped by ${Math.abs(trend.marketShareChange).toFixed(1)}% since last period`,
+        time: "Current",
+      });
+    }
+
+    if (trend.positionChange > 0) {
+      alerts.push({
+        type: "success",
+        message: `Improved by ${trend.positionChange} position${trend.positionChange > 1 ? "s" : ""}`,
+        time: "Current",
+      });
+    } else if (trend.positionChange < 0) {
+      alerts.push({
+        type: "warning",
+        message: `Dropped ${Math.abs(trend.positionChange)} position${Math.abs(trend.positionChange) > 1 ? "s" : ""}`,
+        time: "Current",
+      });
+    }
+
     if (currentData.marketShare < 30) {
       alerts.push({
         type: "warning",
@@ -309,7 +364,17 @@ export async function generateCompetitiveAlerts(
     }
 
     // Check for new competitors
-    if (currentData.totalCompetitors > 0) {
+    const newCompetitors =
+      currentData.totalCompetitors - historicalData.totalCompetitors;
+    if (newCompetitors > 0) {
+      alerts.push({
+        type: "info",
+        message: `${newCompetitors} new competitor${
+          newCompetitors > 1 ? "s" : ""
+        } detected`,
+        time: "Current",
+      });
+    } else if (currentData.totalCompetitors > 0) {
       alerts.push({
         type: "info",
         message: `Tracking ${currentData.totalCompetitors} competitors in AI search results`,
