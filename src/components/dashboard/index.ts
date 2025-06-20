@@ -19,6 +19,9 @@ export { MentionsBreadcrumb } from "./mentions/breadcrumb";
 export { SuggestionsDialog } from "./rankings/suggestions-dialog";
 export { SuggestionsList } from "./rankings/suggestions-dialog";
 
+export { AccountBreadcrumb } from "./account/breadcrumb";
+export { AccountSummary } from "./account/summary";
+
 // Server actions - import directly when needed:
 // - "./topics/actions" for topic server actions
 // - "./rankings/actions" for prompt server actions

@@ -1,4 +1,4 @@
-import { AtSign, BicepsFlexed, Bot, Tag } from "lucide-react";
+import { AtSign, BicepsFlexed, Bot, Tag, Settings } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -25,6 +25,11 @@ const staticNavMain = [
     title: "Mentions",
     icon: AtSign,
     url: "/dashboard/mentions",
+  },
+  {
+    title: "Account",
+    icon: Settings,
+    url: "/dashboard/account",
   },
   {
     title: "Competitors",

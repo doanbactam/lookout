@@ -13,7 +13,7 @@ export interface UserSubscription {
   limits: (typeof PLANS)[PlanType]["limits"];
 }
 
-const getUserPlan = async (): Promise<UserSubscription> => {
+export const getUserPlan = async (): Promise<UserSubscription> => {
   const user = await getUser();
   const plan = user?.plan && isPlanType(user.plan) ? user.plan : "free";
   const subDetails = PLANS[plan] ?? PLANS.free;

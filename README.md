@@ -80,6 +80,7 @@ Visit `http://localhost:3000` to start tracking your AI search rankings.
 | **Competitive Analysis**  | Monitor multiple brands in the same queries          |
 | **Export & Reporting**    | Generate CSV/PDF reports for stakeholders            |
 | **API Access**            | Full programmatic control via REST endpoints         |
+| **Account Management**    | Built-in page to view usage and manage billing |
 
 ## Architecture
 
