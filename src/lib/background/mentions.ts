@@ -42,6 +42,21 @@ interface DetectedMention {
   competitorName?: string | null;
 }
 
+function deduplicateMentions(mentions: DetectedMention[]): DetectedMention[] {
+  const seen = new Set<string>();
+  const result: DetectedMention[] = [];
+  for (const mention of mentions) {
+    const key = `${mention.mentionType}|${mention.extractedText}|${
+      mention.competitorName ?? ""
+    }`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(mention);
+    }
+  }
+  return result;
+}
+
 type MentionInsert = {
   promptId: string;
   topicId: string;
@@ -324,7 +339,9 @@ async function detectMentionsInResponse(
         mention.extractedText.length > 0
     );
 
-    return validMentions;
+    const deduped = deduplicateMentions(validMentions);
+    deduped.sort((a, b) => b.confidence - a.confidence);
+    return deduped;
   } catch (error) {
     if (retryCount < MAX_RETRIES) {
       const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
