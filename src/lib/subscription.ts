@@ -1,8 +1,9 @@
 import { db } from "@/db";
 import { prompts, topics } from "@/db/schema";
-import { eq, and, count } from "drizzle-orm";
+import { eq, and, count, gte } from "drizzle-orm";
 import { isPlanType, PLANS, PlanType } from "./stripe/server";
 import { getUser } from "@/auth/server";
+import { getDaysAgo } from "./utils";
 
 export interface UserSubscription {
   plan: PlanType;
@@ -56,27 +57,13 @@ export async function checkUsageLimit(userId: string): Promise<{
     };
   }
 
-  if (userPlan.plan === "free") {
-    const [usage] = await db
-      .select({ count: count() })
-      .from(prompts)
-      .where(and(eq(prompts.userId, userId)));
-
-    const currentUsage = usage?.count ?? 0;
-    const limit = userPlan.limits.promptsPerDay;
-
-    return {
-      canProcess: currentUsage < limit,
-      currentUsage,
-      limit,
-      plan: userPlan.plan,
-    };
-  }
+  const timeframe =
+    userPlan.plan === "free" ? getDaysAgo(30) : getDaysAgo(1);
 
   const [usage] = await db
     .select({ count: count() })
     .from(prompts)
-    .where(and(eq(prompts.userId, userId)));
+    .where(and(eq(prompts.userId, userId), gte(prompts.createdAt, timeframe)));
 
   const currentUsage = usage?.count ?? 0;
   const limit = userPlan.limits.promptsPerDay;
