@@ -13,6 +13,7 @@ import { signIn } from "@/auth/client";
 import { useState } from "react";
 import { GoogleIcon } from "@/components/ui/icons";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
@@ -29,6 +30,7 @@ export function LoginForm({
       });
     } catch (error) {
       console.error(error);
+      toast.error("Failed to sign in. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -69,8 +71,8 @@ export function LoginForm({
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="/terms">Terms of Service</a>{" "}
+        and <a href="/privacy">Privacy Policy</a>.
       </div>
     </div>
   );
