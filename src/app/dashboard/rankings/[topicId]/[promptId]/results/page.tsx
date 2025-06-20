@@ -4,6 +4,7 @@ import {
   ResultsLoadingSkeleton,
   ResultsContent,
 } from "@/components/dashboard";
+import { PageContainer } from "@/components/ui/page-container";
 
 interface ResultsPageProps {
   params: Promise<{ topicId: string; promptId: string }>;
@@ -13,13 +14,11 @@ export default async function ResultsPage({ params }: ResultsPageProps) {
   const { promptId, topicId } = await params;
 
   return (
-    <>
+    <PageContainer className="flex flex-1 flex-col gap-4">
       <RankingsBreadcrumb topicId={topicId} page="results" />
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <Suspense fallback={<ResultsLoadingSkeleton />}>
-          <ResultsContent promptId={promptId} />
-        </Suspense>
-      </div>
-    </>
+      <Suspense fallback={<ResultsLoadingSkeleton />}>
+        <ResultsContent promptId={promptId} />
+      </Suspense>
+    </PageContainer>
   );
 }
