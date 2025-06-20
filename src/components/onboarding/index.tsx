@@ -5,6 +5,7 @@ import { PromptStep } from "./prompt-step";
 import { AnalysisStep } from "./analysis-step";
 import { CheckCircle2, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PageContainer } from "@/components/ui/page-container";
 import { redirect } from "next/navigation";
 
 interface Step {
@@ -73,7 +74,7 @@ export async function Onboarding({ searchParams }: OnboardingProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      <div className="container max-w-4xl mx-auto py-12 px-4">
+      <PageContainer className="py-12">
         <div className="space-y-8">
           <StepContainer step={steps[0]} isLastStep={false}>
             <TopicStep />
@@ -87,7 +88,7 @@ export async function Onboarding({ searchParams }: OnboardingProps) {
             {firstPromptId && <AnalysisStep promptId={firstPromptId} />}
           </StepContainer>
         </div>
-      </div>
+      </PageContainer>
     </div>
   );
 }

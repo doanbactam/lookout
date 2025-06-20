@@ -3,6 +3,7 @@ import {
   PromptToolbar,
   PromptsTable,
 } from "@/components/dashboard";
+import { PageContainer } from "@/components/ui/page-container";
 
 export default async function Page({
   params,
@@ -12,12 +13,10 @@ export default async function Page({
   const { topicId } = await params;
 
   return (
-    <>
+    <PageContainer className="flex flex-1 flex-col gap-4">
       <RankingsBreadcrumb topicId={topicId} page="rankings" />
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <PromptToolbar topicId={topicId} />
-        <PromptsTable topicId={topicId} />
-      </div>
-    </>
+      <PromptToolbar topicId={topicId} />
+      <PromptsTable topicId={topicId} />
+    </PageContainer>
   );
 }

@@ -3,6 +3,7 @@ import {
   MentionsToolbar,
   MentionsTable,
 } from "@/components/dashboard";
+import { PageContainer } from "@/components/ui/page-container";
 
 export default async function Page({
   params,
@@ -12,12 +13,10 @@ export default async function Page({
   const { topicId } = await params;
 
   return (
-    <>
+    <PageContainer className="flex flex-1 flex-col gap-4">
       <MentionsBreadcrumb topicId={topicId} />
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <MentionsToolbar topicId={topicId} />
-        <MentionsTable topicId={topicId} />
-      </div>
-    </>
+      <MentionsToolbar topicId={topicId} />
+      <MentionsTable topicId={topicId} />
+    </PageContainer>
   );
 }

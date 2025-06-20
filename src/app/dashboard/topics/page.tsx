@@ -3,15 +3,14 @@ import {
   TopicsToolbar,
   TopicsBreadcrumb,
 } from "@/components/dashboard";
+import { PageContainer } from "@/components/ui/page-container";
 
 export default function Page() {
   return (
-    <>
+    <PageContainer className="flex flex-1 flex-col gap-4">
       <TopicsBreadcrumb />
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <TopicsToolbar />
-        <TopicsTable />
-      </div>
-    </>
+      <TopicsToolbar />
+      <TopicsTable />
+    </PageContainer>
   );
 }
