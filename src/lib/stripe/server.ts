@@ -44,14 +44,14 @@ export const PLANS = {
     features: [
       "25 prompts per day",
       "Track 5 topics or brands",
-      "All AI providers (OpenAI, Claude, Gemini)",
+      "All AI providers (OpenAI, Claude, Gemini, Perplexity)",
       "Priority processing",
       "Advanced analytics",
     ],
     limits: {
       promptsPerDay: 25,
       topicsLimit: 5,
-      providers: ["openai", "claude", "google"],
+      providers: ["openai", "claude", "google", "perplexity"],
       priority: "normal",
     },
   },
@@ -71,7 +71,7 @@ export const PLANS = {
     limits: {
       promptsPerDay: 100,
       topicsLimit: 10,
-      providers: ["openai", "claude", "google"],
+      providers: ["openai", "claude", "google", "perplexity"],
       priority: "high",
     },
   },
@@ -89,7 +89,7 @@ export const PLANS = {
     limits: {
       promptsPerDay: 10000,
       topicsLimit: 100,
-      providers: ["openai", "claude", "google"],
+      providers: ["openai", "claude", "google", "perplexity"],
       priority: "highest",
     },
   },

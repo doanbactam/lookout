@@ -5,7 +5,7 @@ import { generateObject, generateText } from "ai";
 import { z } from "zod";
 import { cleanUrl } from "./utils";
 
-export type LLMProvider = "openai" | "claude" | "google";
+export type LLMProvider = "openai" | "claude" | "google" | "perplexity";
 
 // Enhanced source schema with additional metadata
 export const sourceSchema = z.object({
@@ -470,6 +470,47 @@ export async function processPromptWithClaude(
   }
 }
 
+export async function processPromptWithPerplexity(
+  prompt: string,
+  region: string
+): Promise<LLMResponse> {
+  try {
+    const response = await fetch("https://api.perplexity.ai/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "pplx-70b-online",
+        stream: false,
+        messages: [{ role: "user", content: prompt }],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Perplexity API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content ?? "";
+    const parsed = searchResultsSchema.parse(JSON.parse(text));
+
+    return {
+      provider: "perplexity",
+      response: parsed,
+      metadata: { data },
+    };
+  } catch (error) {
+    return {
+      provider: "perplexity",
+      response: [],
+      metadata: {},
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
 export async function processPromptWithAllProviders(
   prompt: string,
   region: string
@@ -479,6 +520,7 @@ export async function processPromptWithAllProviders(
     processPromptWithOpenAI(searchPrompt, region),
     processPromptWithGoogle(searchPrompt, region),
     processPromptWithClaude(searchPrompt, region),
+    processPromptWithPerplexity(searchPrompt, region),
   ];
 
   return Promise.all(promises);

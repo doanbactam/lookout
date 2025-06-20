@@ -48,7 +48,7 @@ bun install
 
 # Configure environment
 cp .env.example .env.local
-# Add your API keys to .env.local
+# Add your API keys to .env.local (including PERPLEXITY_API_KEY)
 
 # Setup database
 bun run db:migrate
@@ -158,7 +158,7 @@ bun run lint
 
 ### Roadmap
 
-- [ ] **Perplexity AI Integration** - Add Perplexity search support
+- [x] **Perplexity AI Integration** - Add Perplexity search support
 - [ ] **Slack/Discord Alerts** - Real-time ranking notifications
 - [ ] **API Rate Limiting** - Enterprise-grade usage controls
 - [ ] **White-label Solution** - Custom branding options
