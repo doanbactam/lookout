@@ -13,6 +13,7 @@ import { signIn } from "@/auth/client";
 import { useState } from "react";
 import { GoogleIcon } from "@/components/ui/icons";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
@@ -29,6 +30,7 @@ export function LoginForm({
       });
     } catch (error) {
       console.error(error);
+      toast.error("Failed to sign in. Please try again.");
     } finally {
       setIsLoading(false);
     }
