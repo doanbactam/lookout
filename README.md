@@ -150,6 +150,7 @@ git checkout -b feature/amazing-feature
 bun install
 
 # Make your changes and test
+bun install
 bun run test
 bun run lint
 
