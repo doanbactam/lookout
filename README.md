@@ -48,7 +48,7 @@ bun install
 
 # Configure environment
 cp .env.example .env.local
-# Add your API keys to .env.local
+# Open `.env.local` and fill in each variable with your real credentials
 
 # Setup database
 bun run db:migrate
