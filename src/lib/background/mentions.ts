@@ -7,7 +7,7 @@
 
 import { db } from "@/db";
 import { mentions, modelResults, prompts } from "@/db/schema";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, eq, inArray, sql, asc } from "drizzle-orm";
 import { generateObject } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
@@ -183,6 +183,7 @@ export async function processUserMentions(userId: string, topicId?: string) {
                 with: {
                   prompt: { with: { topic: true } },
                 },
+                orderBy: asc(modelResults.createdAt),
                 limit: BATCH_SIZE,
                 offset: offset,
               });
