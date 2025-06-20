@@ -146,6 +146,9 @@ git clone https://github.com/10xuio/lookout.git
 # Create a feature branch
 git checkout -b feature/amazing-feature
 
+# Install dependencies
+bun install
+
 # Make your changes and test
 bun run test
 bun run lint
@@ -159,7 +162,7 @@ bun run lint
 - [ ] **Slack/Discord Alerts** - Real-time ranking notifications
 - [ ] **API Rate Limiting** - Enterprise-grade usage controls
 - [ ] **White-label Solution** - Custom branding options
-- [ ] **Advanced Analytics** - ML-powered insights
+- [x] **Advanced Analytics** - ML-powered insights
 - [ ] **Mobile App** - iOS/Android companion apps
 
 ## Use Cases
