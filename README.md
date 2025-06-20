@@ -25,7 +25,7 @@
 LookOut is the first open-source platform designed to track and optimize your brand's ranking in AI-powered search results. As LLMs become the primary gateway for information discovery, your visibility in AI responses directly impacts your business growth.
 
 **Get Started Now**
-One click deply to your vercel account.
+One click deploy to your Vercel account.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/10xuio/lookout)
 
