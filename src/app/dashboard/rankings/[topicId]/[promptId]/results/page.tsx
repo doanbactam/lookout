@@ -7,11 +7,11 @@ import {
 import { PageContainer } from "@/components/ui/page-container";
 
 interface ResultsPageProps {
-  params: Promise<{ topicId: string; promptId: string }>;
+  params: { topicId: string; promptId: string };
 }
 
 export default async function ResultsPage({ params }: ResultsPageProps) {
-  const { promptId, topicId } = await params;
+  const { promptId, topicId } = params;
 
   return (
     <PageContainer className="flex flex-1 flex-col gap-4">

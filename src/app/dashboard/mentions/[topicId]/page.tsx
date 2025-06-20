@@ -8,9 +8,9 @@ import { PageContainer } from "@/components/ui/page-container";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ topicId?: string }>;
+  params: { topicId?: string };
 }) {
-  const { topicId } = await params;
+  const { topicId } = params;
 
   return (
     <PageContainer className="flex flex-1 flex-col gap-4">
