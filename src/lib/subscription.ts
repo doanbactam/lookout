@@ -51,7 +51,7 @@ export async function checkUsageLimit(userId: string): Promise<{
     return {
       canProcess: false,
       currentUsage: 0,
-      limit: userPlan.limits.promptsPerDay,
+      limit: -1,
       plan: userPlan.plan,
     };
   }
