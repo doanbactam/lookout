@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUser } from "@/auth/server";
-import { processUserMentions } from "@/lib/background/mentions";
+import {
+  processUserMentions,
+  acquireProcessingLock,
+} from "@/lib/background/mentions";
 import { waitUntil } from "@vercel/functions";
 
 export const runtime = "nodejs";
@@ -14,6 +17,18 @@ export async function POST(request: NextRequest) {
     }
 
     const { topicId } = await request.json();
+
+    if (!topicId) {
+      return NextResponse.json({ error: "Topic ID is required" }, { status: 400 });
+    }
+
+    const hasLock = await acquireProcessingLock(user.id, topicId);
+    if (!hasLock) {
+      return NextResponse.json(
+        { error: "Mention analysis already running" },
+        { status: 409 }
+      );
+    }
 
     // TODO: work out a better strategy for background processing
     waitUntil(processUserMentions(user.id, topicId));

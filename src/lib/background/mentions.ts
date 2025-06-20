@@ -71,7 +71,7 @@ type MentionInsert = {
   competitorName?: string | null;
 };
 
-async function acquireProcessingLock(
+export async function acquireProcessingLock(
   userId: string,
   topicId?: string
 ): Promise<boolean> {
